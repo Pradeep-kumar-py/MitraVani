@@ -14,6 +14,7 @@ import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
 import com.example.mitravani.navigation.Screen
 import com.example.mitravani.ui.home.HomeScreen
+import com.example.mitravani.ui.theme.LocalDiyaColors
 
 
 val LocalNavigator = staticCompositionLocalOf<Navigator> {
@@ -24,10 +25,13 @@ val LocalNavigator = staticCompositionLocalOf<Navigator> {
 fun AppNavigator() {
     val backStack = rememberNavBackStack(Screen.Home)
     val navigator = remember { Navigator(backStack) }
+    val colors = LocalDiyaColors.current
     CompositionLocalProvider(
         LocalNavigator provides navigator
     ) {
-        Scaffold{ padding ->
+        Scaffold(
+            containerColor = colors.background
+        ) { padding ->
             NavDisplay(
                 backStack = backStack,
                 onBack = { navigator.pop() },
