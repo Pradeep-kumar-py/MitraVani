@@ -1,104 +1,333 @@
 package com.example.mitravani.ui.home
 
-import android.content.res.Configuration
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.mitravani.ui.home.components.DiyaBackground
-import com.example.mitravani.ui.home.components.HearthOrb
-import com.example.mitravani.ui.home.components.HomeGreeting
-import com.example.mitravani.ui.home.components.HomeMode
-import com.example.mitravani.ui.home.components.HomeModeSwitch
-import com.example.mitravani.ui.home.components.HomeReadyLabel
-import com.example.mitravani.ui.home.components.HomeTopBar
-import com.example.mitravani.ui.home.components.PrimaryCallButton
-import com.example.mitravani.ui.theme.MitraVaniTheme
+import com.example.mitravani.R
+
 
 @Composable
-fun HomeScreen(
-    onCallClick: () -> Unit = {},
-    onSettingsClick: () -> Unit = {}
-) {
-    var selectedMode by remember { mutableStateOf(HomeMode.Voice) }
+fun HomeScreen() {
 
-    DiyaBackground {
-        Box(
+    var messageInputState = rememberTextFieldState()
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Color(0xFF121A1A)
+    ) {
+        Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 8.dp)
         ) {
-            HomeTopBar(
-                companionInitial = "S",
-                onSettingsClick = onSettingsClick,
+            Row(
                 modifier = Modifier
-                    .align(Alignment.TopCenter)
-                    .padding(horizontal = 24.dp, vertical = 16.dp)
-            )
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 24.dp)
-                    .padding(top = 80.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center
+                    .fillMaxWidth()
+                    .height(50.dp),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                HearthOrb()
-                Spacer(modifier = Modifier.height(24.dp))
-                HomeGreeting(text = "Tu aaya. I was thinking\nabout you.")
-                Spacer(modifier = Modifier.height(32.dp))
-                HomeReadyLabel()
-                Spacer(modifier = Modifier.height(44.dp))
-                HomeModeSwitch(
-                    selectedMode = selectedMode,
-                    onModeSelected = { selectedMode = it }
+
+                HamburgerMenu(
+                    onClick = { /* Handle menu click */ },
+                    icon = R.drawable.ic_menu,
+                    modifier = Modifier.size(30.dp)
                 )
-                Spacer(modifier = Modifier.height(44.dp))
-                PrimaryCallButton(
-                    text = if (selectedMode == HomeMode.Voice) "Call Sathi" else "Text Sathi",
-                    onClick = onCallClick
+
+                TopBarName(name = "MitraVani")
+
+                HamburgerMenu(
+                    onClick = { /* Handle menu click */ },
+                    icon = R.drawable.ic_profile,
+                    modifier = Modifier.size(40.dp)
                 )
+
             }
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(40) { index ->
+                    if (index % 2 == 0) {
+                        MitraVaniMessageBubble(message = "Hello! This is a message from MitraVani. How can I assist you today?")
+                    } else {
+                        UserMessageBubble(message = "Hi MitraVani! I have a question about my account.")
+                    }
+                }
+            }
+
+            BottomBar(messageInputState = messageInputState)
+        }
+    }
+
+}
+
+@Composable
+fun HamburgerMenu(
+    onClick: () -> Unit,
+    icon: Int,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = Modifier
+            .size(40.dp)
+            .clip(CircleShape)
+            .border(
+                1.dp,
+                Color.White.copy(alpha = 0.2f),
+                CircleShape
+            )
+    ) {
+
+        // 🔹 background blur (only this gets blurred)
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .blur(10.dp)
+                .background(Color.White.copy(alpha = 0.08f))
+        )
+
+        // 🔹 actual button (NOT blurred)
+        IconButton(
+            onClick = onClick,
+            modifier = Modifier.matchParentSize()
+        ) {
+            Icon(
+                painter = painterResource(id = icon),
+                contentDescription = "Menu Icon",
+                tint = Color.White,
+                modifier = modifier.size(20.dp)
+            )
         }
     }
 }
 
-@Preview(
-    name = "Dark",
-    showBackground = true,
-    widthDp = 400,
-    heightDp = 884,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
-)
 @Composable
-private fun HomeScreenDarkPreview() {
-    MitraVaniTheme {
-        HomeScreen()
+fun TopBarName(name: String) {
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(50))
+            .border(
+                1.dp,
+                Color.White.copy(alpha = 0.2f),
+                RoundedCornerShape(50)
+            ),
+        contentAlignment = Alignment.Center
+    ) {
+
+        // 🔹 Background layer (blur + tint)
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .blur(20.dp)
+                .background(Color.White.copy(alpha = 0.08f))
+        )
+
+        // 🔹 Foreground text (NOT blurred)
+        Text(
+            text = name,
+            color = Color.White, // ⚠️ use white for contrast
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp)
+        )
     }
 }
 
-@Preview(
-    name = "Light",
-    showBackground = true,
-    widthDp = 400,
-    heightDp = 884,
-    uiMode = Configuration.UI_MODE_NIGHT_NO
-)
+
 @Composable
-private fun HomeScreenLightPreview() {
-    MitraVaniTheme {
-        HomeScreen()
+fun BottomBar(messageInputState: TextFieldState) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(50))
+            .border(
+                1.dp,
+                Color.White.copy(alpha = 0.2f),
+                RoundedCornerShape(50)
+            )
+    ) {
+
+        // 🔹 Glass background
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .blur(20.dp)
+                .background(Color.White.copy(alpha = 0.08f))
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 0.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            // 🎤 Left icon (circle background)
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .clip(CircleShape)
+                    .background(Color.Black.copy(alpha = 0.4f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_graphic_eq),
+                    contentDescription = null,
+                    tint = Color.White,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+
+            // ✏️ Text input
+            TextField(
+                state = messageInputState,
+                placeholder = {
+                    Text(
+                        "Your message",
+                        color = Color.White.copy(alpha = 0.6f)
+                    )
+                },
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    disabledContainerColor = Color.Transparent,
+                    focusedIndicatorColor = Color.Transparent,
+                    unfocusedIndicatorColor = Color.Transparent
+                ),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 8.dp)
+            )
+
+            // ➕ Right icon
+            Icon(
+                painter = painterResource(id = R.drawable.ic_add),
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(24.dp)
+            )
+        }
     }
+}
+
+
+@Composable
+fun MitraVaniMessageBubble(message: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp),
+        horizontalArrangement = Arrangement.Start,
+        verticalAlignment = Alignment.Bottom
+    ) {
+
+        // 🤖 Bot avatar
+        Box(
+            modifier = Modifier
+                .size(28.dp)
+                .clip(CircleShape)
+                .background(Color(0xFF6EC6B8)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                painter = painterResource(id = R.drawable.ic_graphic_eq),
+                contentDescription = null,
+                tint = Color.White,
+                modifier = Modifier.size(16.dp)
+            )
+        }
+
+        Spacer(modifier = Modifier.width(8.dp))
+
+        // 💬 Glass bubble
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(20.dp))
+                .border(
+                    1.dp,
+                    Color.White.copy(alpha = 0.2f),
+                    RoundedCornerShape(20.dp)
+                )
+        ) {
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .blur(20.dp)
+                    .background(Color.White.copy(alpha = 0.08f))
+            )
+
+            Text(
+                text = message,
+                color = Color.White,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .widthIn(max = 260.dp)
+            )
+        }
+    }
+}
+
+@Composable
+fun UserMessageBubble(message: String) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp),
+        horizontalArrangement = Arrangement.End,
+        verticalAlignment = Alignment.Bottom
+    ) {
+
+        // 💬 Glass bubble
+        Box(
+            modifier = Modifier
+                .clip(RoundedCornerShape(20.dp))
+                .border(
+                    1.dp,
+                    Color.White.copy(alpha = 0.2f),
+                    RoundedCornerShape(20.dp)
+                )
+        ) {
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .blur(20.dp)
+                    .background(Color.White.copy(alpha = 0.08f))
+            )
+
+            Text(
+                text = message,
+                color = Color.White,
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .widthIn(max = 260.dp)
+            )
+        }
+    }
+}
+
+
+@Preview(showBackground = true)
+@Composable
+fun HomeScreenPreview() {
+    HomeScreen()
 }

@@ -7,7 +7,13 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed interface Screen: NavKey {
     @Serializable
-    data object Splash : Screen
+    data object OnboardingScreenOne : Screen
+
+    @Serializable
+    data object OnboardingScreenTwo : Screen
+
+    @Serializable
+    data object OnboardingScreenThree : Screen
 
     // Auth screens
     @Serializable
@@ -18,6 +24,10 @@ sealed interface Screen: NavKey {
 
     @Serializable
     data object Home : Screen
+
+
+    @Serializable
+    data object Voice : Screen
 
     @Serializable
     data object Settings : Screen

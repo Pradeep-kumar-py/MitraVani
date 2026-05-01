@@ -3,56 +3,72 @@ package com.example.mitravani.ui.theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 
-private val DarkColorScheme = darkColorScheme(
-    primary = DarkDiyaColors.primary,
-    onPrimary = DarkDiyaColors.onPrimary,
-    primaryContainer = DarkDiyaColors.primaryContainer,
-    onPrimaryContainer = DarkDiyaColors.onPrimary,
-    secondary = DarkDiyaColors.primaryContainer,
-    tertiary = DarkDiyaColors.avatarSurface,
-    background = DarkDiyaColors.background,
-    onBackground = DarkDiyaColors.onSurface,
-    surface = DarkDiyaColors.surface,
-    onSurface = DarkDiyaColors.onSurface,
-    surfaceContainer = DarkDiyaColors.surfaceContainer,
-    surfaceContainerHigh = DarkDiyaColors.surfaceContainerHigh,
-    outline = DarkDiyaColors.outline
+// ─── Material3 Color Scheme ───────────────────────────────────────────────────
+// Wired from DarkMitravaniColors so every Material component uses the palette.
+private val MitravaniDarkColorScheme = darkColorScheme(
+    primary                = DarkMitravaniColors.primary,
+    onPrimary              = DarkMitravaniColors.onPrimary,
+    primaryContainer       = DarkMitravaniColors.primaryContainer,
+    onPrimaryContainer     = DarkMitravaniColors.onPrimaryContainer,
+    inversePrimary         = DarkMitravaniColors.inversePrimary,
+
+    secondary              = DarkMitravaniColors.secondary,
+    onSecondary            = DarkMitravaniColors.onSecondary,
+    secondaryContainer     = DarkMitravaniColors.secondaryContainer,
+    onSecondaryContainer   = DarkMitravaniColors.onSecondaryContainer,
+
+    tertiary               = DarkMitravaniColors.tertiary,
+    onTertiary             = DarkMitravaniColors.onTertiary,
+    tertiaryContainer      = DarkMitravaniColors.tertiaryContainer,
+    onTertiaryContainer    = DarkMitravaniColors.onTertiaryContainer,
+
+    background             = DarkMitravaniColors.background,
+    onBackground           = DarkMitravaniColors.onSurface,
+    surface                = DarkMitravaniColors.surface,
+    onSurface              = DarkMitravaniColors.onSurface,
+    onSurfaceVariant       = DarkMitravaniColors.onSurfaceVariant,
+    surfaceVariant         = SurfaceVariant,
+    inverseSurface         = DarkMitravaniColors.inverseSurface,
+    inverseOnSurface       = DarkMitravaniColors.inverseOnSurface,
+    surfaceContainer       = DarkMitravaniColors.surfaceContainer,
+    surfaceContainerHigh   = DarkMitravaniColors.surfaceContainerHigh,
+    surfaceContainerHighest= DarkMitravaniColors.surfaceContainerHighest,
+    surfaceContainerLow    = DarkMitravaniColors.surfaceContainerLow,
+
+    outline                = DarkMitravaniColors.outline,
+    outlineVariant         = DarkMitravaniColors.outlineVariant,
+
+    error                  = DarkMitravaniColors.error,
+    onError                = DarkMitravaniColors.onError,
+    errorContainer         = DarkMitravaniColors.errorContainer,
+    onErrorContainer       = DarkMitravaniColors.onErrorContainer,
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = LightDiyaColors.primary,
-    onPrimary = LightDiyaColors.onPrimary,
-    primaryContainer = LightDiyaColors.primaryContainer,
-    onPrimaryContainer = LightDiyaColors.onPrimary,
-    secondary = LightDiyaColors.primaryContainer,
-    tertiary = LightDiyaColors.avatarSurface,
-    background = LightDiyaColors.background,
-    onBackground = LightDiyaColors.onSurface,
-    surface = LightDiyaColors.surface,
-    onSurface = LightDiyaColors.onSurface,
-    surfaceContainer = LightDiyaColors.surfaceContainer,
-    surfaceContainerHigh = LightDiyaColors.surfaceContainerHigh,
-    outline = LightDiyaColors.outline
-)
-
+// ─── Theme Composable ─────────────────────────────────────────────────────────
 @Composable
 fun MitraVaniTheme(
+    // Currently only a dark theme is defined in DESIGN.md.
+    // Pass darkTheme = false once a light palette is added.
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
-    val diyaColors = if (darkTheme) DarkDiyaColors else LightDiyaColors
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
+    val colors = DarkMitravaniColors  // swap to a LightMitravaniColors when ready
 
-    CompositionLocalProvider(LocalDiyaColors provides diyaColors) {
+    CompositionLocalProvider(LocalMitravaniColors provides colors) {
         MaterialTheme(
-            colorScheme = colorScheme,
-            typography = Typography,
-            content = content
+            colorScheme = MitravaniDarkColorScheme,
+            typography  = MitravaniTypography,
+            content     = content
         )
     }
+}
+
+// ─── Convenience Accessor ─────────────────────────────────────────────────────
+// Usage: val teal = MitraVaniTheme.colors.primary
+object MitraVaniTheme {
+    val colors: MitravaniColors
+        @Composable get() = LocalMitravaniColors.current
 }

@@ -12,9 +12,12 @@ import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.ui.NavDisplay
-import com.example.mitravani.navigation.Screen
 import com.example.mitravani.ui.home.HomeScreen
-import com.example.mitravani.ui.theme.LocalDiyaColors
+import com.example.mitravani.ui.onboarding.OnboardingScreenOne
+import com.example.mitravani.ui.onboarding.OnboardingScreenThree
+import com.example.mitravani.ui.onboarding.OnboardingScreenTwo
+import com.example.mitravani.ui.theme.LocalMitravaniColors
+import com.example.mitravani.ui.voice.VoiceScreen
 
 
 val LocalNavigator = staticCompositionLocalOf<Navigator> {
@@ -23,9 +26,9 @@ val LocalNavigator = staticCompositionLocalOf<Navigator> {
 
 @Composable
 fun AppNavigator() {
-    val backStack = rememberNavBackStack(Screen.Home)
+    val backStack = rememberNavBackStack(Screen.OnboardingScreenOne)
     val navigator = remember { Navigator(backStack) }
-    val colors = LocalDiyaColors.current
+    val colors = LocalMitravaniColors.current
     CompositionLocalProvider(
         LocalNavigator provides navigator
     ) {
@@ -45,7 +48,17 @@ fun AppNavigator() {
 
 @Composable
 private fun appEntryProvider() = entryProvider<NavKey> {
-    // Auth & Common
+
+    entry<Screen.OnboardingScreenOne> { OnboardingScreenOne() }
+    entry<Screen.OnboardingScreenTwo> { OnboardingScreenTwo() }
+    entry<Screen.OnboardingScreenThree> { OnboardingScreenThree() }
+
     entry<Screen.Home> { HomeScreen() }
+
+    entry<Screen.Voice> { VoiceScreen() }
+
+
+
+
 
 }
