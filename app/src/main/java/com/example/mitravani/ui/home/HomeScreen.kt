@@ -19,6 +19,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.mitravani.R
+import com.example.mitravani.ui.components.IconButtonLocal
+import com.example.mitravani.ui.components.TopBarName
 
 
 @Composable
@@ -43,18 +45,17 @@ fun HomeScreen() {
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
 
-                HamburgerMenu(
+                IconButtonLocal(
                     onClick = { /* Handle menu click */ },
                     icon = R.drawable.ic_menu,
-                    modifier = Modifier.size(30.dp)
                 )
 
                 TopBarName(name = "MitraVani")
 
-                HamburgerMenu(
+                IconButtonLocal(
                     onClick = { /* Handle menu click */ },
                     icon = R.drawable.ic_profile,
-                    modifier = Modifier.size(40.dp)
+                    iconSize = 40.dp,
                 )
 
             }
@@ -80,76 +81,7 @@ fun HomeScreen() {
 
 }
 
-@Composable
-fun HamburgerMenu(
-    onClick: () -> Unit,
-    icon: Int,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = Modifier
-            .size(40.dp)
-            .clip(CircleShape)
-            .border(
-                1.dp,
-                Color.White.copy(alpha = 0.2f),
-                CircleShape
-            )
-    ) {
 
-        // 🔹 background blur (only this gets blurred)
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .blur(10.dp)
-                .background(Color.White.copy(alpha = 0.08f))
-        )
-
-        // 🔹 actual button (NOT blurred)
-        IconButton(
-            onClick = onClick,
-            modifier = Modifier.matchParentSize()
-        ) {
-            Icon(
-                painter = painterResource(id = icon),
-                contentDescription = "Menu Icon",
-                tint = Color.White,
-                modifier = modifier.size(20.dp)
-            )
-        }
-    }
-}
-
-@Composable
-fun TopBarName(name: String) {
-    Box(
-        modifier = Modifier
-            .clip(RoundedCornerShape(50))
-            .border(
-                1.dp,
-                Color.White.copy(alpha = 0.2f),
-                RoundedCornerShape(50)
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-
-        // 🔹 Background layer (blur + tint)
-        Box(
-            modifier = Modifier
-                .matchParentSize()
-                .blur(20.dp)
-                .background(Color.White.copy(alpha = 0.08f))
-        )
-
-        // 🔹 Foreground text (NOT blurred)
-        Text(
-            text = name,
-            color = Color.White, // ⚠️ use white for contrast
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp)
-        )
-    }
-}
 
 
 @Composable
