@@ -20,9 +20,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mitravani.R
+import com.example.mitravani.navigation.LocalNavigator
+import com.example.mitravani.navigation.Screen
 
 @Composable
 fun OnboardingScreenOne() {
+
+    val navigator = LocalNavigator.current
+
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -90,7 +95,7 @@ fun OnboardingScreenOne() {
             }
 
             OutlinedButton(
-                onClick = { /* TODO: Navigate to next onboarding screen */ },
+                onClick = { navigator.navigate(Screen.Home) },
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
                     .padding(bottom = 60.dp,)

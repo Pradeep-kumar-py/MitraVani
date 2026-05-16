@@ -41,7 +41,7 @@ fun TopBarName(name: String) {
             text = name,
             color = Color.White, // ⚠️ use white for contrast
             style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp)
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
         )
     }
 }
