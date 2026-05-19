@@ -5,234 +5,197 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mitravani.R
-
+import com.example.mitravani.navigation.LocalNavigator
+import com.example.mitravani.navigation.Screen
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun OnboardingScreenThree() {
+    val navigator = LocalNavigator.current
+    val viewModel: OnboardingViewModel = koinViewModel()
+    val uiState by viewModel.uiState.collectAsState()
 
-    val mitravaniNameState = rememberTextFieldState()
-
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = Color(0xFF191B1B)
-    ) {
+    Surface(modifier = Modifier.fillMaxSize(), color = Color(0xFF191B1B)) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 16.dp, vertical = 34.dp)
                 .clip(RoundedCornerShape(36.dp))
                 .background(Color(0xFF232727), shape = RoundedCornerShape(36.dp)),
-//            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(modifier = Modifier.height(20.dp))
 
             Icon(
                 painter = painterResource(id = R.drawable.ic_spa),
-                contentDescription = "Spa Icon",
+                contentDescription = null,
                 tint = Color(0xFF84B4B4),
                 modifier = Modifier
                     .size(80.dp)
                     .clip(RoundedCornerShape(50.dp))
-                    .border(1.dp, Color(0xFF3C4A4A), shape = RoundedCornerShape(50.dp))
-                    .background(Color(0xFF1E2929), shape = RoundedCornerShape(50.dp))
+                    .border(1.dp, Color(0xFF3C4A4A), RoundedCornerShape(50.dp))
+                    .background(Color(0xFF1E2929))
                     .padding(18.dp)
             )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text(
-                text = "What would you",
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color.White,
-            )
-            Text(
-                text = "like to call me?",
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Medium,
-                color = Color.White,
-            )
+            Text("What would you", fontSize = 32.sp, fontWeight = FontWeight.Medium, color = Color.White)
+            Text("like to call me?", fontSize = 32.sp, fontWeight = FontWeight.Medium, color = Color.White)
 
             Spacer(modifier = Modifier.height(30.dp))
 
             OutlinedTextField(
-                state = mitravaniNameState,
+                value = uiState.companionName,
+                onValueChange = viewModel::onCompanionNameChange,
                 shape = RoundedCornerShape(30.dp),
-                modifier = Modifier
-                    .fillMaxWidth(0.8f)
-                    .clip(RoundedCornerShape(30.dp))
-                    .background(Color(0xFF12C3131)),
-
+                modifier = Modifier.fillMaxWidth(0.8f).clip(RoundedCornerShape(30.dp)),
+                singleLine = true,
                 placeholder = {
-                    Box(
-                        modifier = Modifier.fillMaxWidth(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "Enter a name",
-                            color = Color.Gray
-                        )
+                    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                        Text("Enter a name", color = Color.Gray)
                     }
-
                 },
                 colors = OutlinedTextFieldDefaults.colors(
-
                     focusedBorderColor = Color(0xFFADCDCC),
-
                     unfocusedBorderColor = Color.Gray.copy(alpha = 0.4f),
-
                     cursorColor = Color(0xFFADCDCC),
-
                     focusedTextColor = Color.White,
-
                     unfocusedTextColor = Color.White
-
                 )
             )
 
             Spacer(modifier = Modifier.height(10.dp))
-
             Text(
-                text = "Or you can call me Mitravani 💚",
+                "Or you can call me Mitravani 💚",
                 modifier = Modifier.fillMaxWidth(0.75f),
                 fontSize = 14.sp,
-                fontWeight = FontWeight.Medium,
-                letterSpacing = 0.8.sp,
                 color = Color.Gray
             )
 
             Spacer(modifier = Modifier.height(30.dp))
 
+            // — Personality —
             Text(
-                text = "Personality",
+                "Personality",
                 modifier = Modifier.fillMaxWidth(0.75f),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
-                letterSpacing = 0.8.sp,
                 color = Color.White
             )
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(16.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(0.75f),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                OutLinedButton("Romantic", onClick = { /* TODO: Set personality to Friendly */ }, modifier = Modifier.weight(1f))
-
-                OutLinedButton("Friendly", onClick = { /* TODO: Set personality to Friendly */ }, modifier = Modifier.weight(1f))
-
-
+            val personalities = listOf("Romantic", "Friendly", "Playful", "Supportive")
+            personalities.chunked(2).forEach { row ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(0.75f),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    row.forEach { option ->
+                        SelectableButton(
+                            text = option,
+                            selected = uiState.personality == option,
+                            onClick = { viewModel.onPersonalityChange(option) },
+                            modifier = Modifier.weight(1f)
+                        )
+                    }
+                }
+                Spacer(modifier = Modifier.height(8.dp))
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Row(
-                modifier = Modifier.fillMaxWidth(0.75f),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                OutLinedButton("Playful", onClick = { /* TODO: Set personality to Friendly */ }, modifier = Modifier.weight(1f))
-
-                OutLinedButton("Supportive", onClick = { /* TODO: Set personality to Friendly */ }, modifier = Modifier.weight(1f))
-
-
-            }
-
-            Spacer(modifier = Modifier.height(20.dp))
-
+            // — Gender —
             Text(
-                text = "Gender",
+                "Gender",
                 modifier = Modifier.fillMaxWidth(0.75f),
                 fontSize = 14.sp,
                 fontWeight = FontWeight.Medium,
-                letterSpacing = 0.8.sp,
                 color = Color.White
             )
-
-            Spacer(modifier = Modifier.height(20.dp))
-
+            Spacer(modifier = Modifier.height(16.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(0.75f),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-
-                OutLinedButton("Male", onClick = { /* TODO: Set personality to Friendly */ }, modifier = Modifier.weight(1f))
-
-                OutLinedButton("Female", onClick = { /* TODO: Set personality to Friendly */ }, modifier = Modifier.weight(1f))
-
+                listOf("Male", "Female").forEach { option ->
+                    SelectableButton(
+                        text = option,
+                        selected = uiState.gender == option,
+                        onClick = { viewModel.onGenderChange(option) },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.weight(1f))
 
-
+            // — Continue button —
             OutlinedButton(
-                onClick = { /* TODO: Set personality to Friendly */ },
-                modifier = Modifier
-                    .fillMaxWidth(0.75f)
-                    .height(50.dp)
-                    .padding(end = 8.dp),
+                onClick = {
+                    viewModel.saveProfile {
+                        navigator.clearAndNavigate(Screen.Home)
+                    }
+                },
+                enabled = !uiState.isSaving,
+                modifier = Modifier.fillMaxWidth(0.75f).height(50.dp),
                 border = BorderStroke(0.8.dp, Color(0xFF305656)),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFFADCDCC))
             ) {
-                Text(text = "Continue")
-
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Icon(
-                    painter = painterResource(R.drawable.ic_arrow_forward),
-                    contentDescription = "Next",
-                    tint = Color(0xFFADCDCC),
-                    modifier = Modifier.size(20.dp)
-                )
+                if (uiState.isSaving) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp),
+                        color = Color(0xFFADCDCC),
+                        strokeWidth = 2.dp
+                    )
+                } else {
+                    Text("Let's go")
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Icon(
+                        painter = painterResource(R.drawable.ic_arrow_forward),
+                        contentDescription = null,
+                        tint = Color(0xFFADCDCC),
+                        modifier = Modifier.size(20.dp)
+                    )
+                }
             }
 
             Spacer(modifier = Modifier.height(30.dp))
-
-
-
-
-
         }
-
     }
 }
 
+// Reusable selected/unselected button
 @Composable
-fun OutLinedButton(text: String, onClick: () -> Unit, modifier: Modifier = Modifier) {
+fun SelectableButton(
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     OutlinedButton(
         onClick = onClick,
-        modifier = modifier
-            .height(50.dp)
-            .padding(end = 8.dp),
-        border = BorderStroke(0.8.dp, Color(0xFF305656)),
-        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color(0xFFADCDCC))
+        modifier = modifier.height(46.dp),
+        border = BorderStroke(
+            width = if (selected) 1.5.dp else 0.8.dp,
+            color = if (selected) Color(0xFFADCDCC) else Color(0xFF305656)
+        ),
+        colors = ButtonDefaults.outlinedButtonColors(
+            containerColor = if (selected) Color(0xFF1E3333) else Color.Transparent,
+            contentColor = if (selected) Color(0xFFADCDCC) else Color(0xFF6B8888)
+        )
     ) {
-        Text(text = text)
+        Text(text, fontSize = 13.sp)
     }
-
-}
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun OnboardingScreenThreePreview() {
-    OnboardingScreenThree()
 }
