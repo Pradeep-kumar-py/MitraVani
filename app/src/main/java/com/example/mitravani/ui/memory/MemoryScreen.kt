@@ -21,13 +21,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.*
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.example.mitravani.R
+import com.example.mitravani.navigation.LocalNavigator
+import com.example.mitravani.navigation.Screen
 import com.example.mitravani.ui.components.IconButtonLocal
 
 @Composable
 fun MemoryScreen() {
+
+    val navigator = LocalNavigator.current
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color(0xFF121A1A)
@@ -148,7 +154,7 @@ fun MemoryScreen() {
                         )
 
                         IconButtonLocal(
-                            onClick = { },
+                            onClick = {navigator.navigate(Screen.MemoryDetailScreen) },
                             icon = R.drawable.ic_arrow_forward,
                             iconSize = 24.dp,
                             boxSize = 36.dp
@@ -157,40 +163,40 @@ fun MemoryScreen() {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    NoMemoriesCard(onClick = {})
+                    NoMemoriesCard(onClick = {navigator.navigate(Screen.MemoryDetailScreen)})
                 }
                 Spacer(modifier = Modifier.height(20.dp))
 
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Voices",
-                            fontSize = 26.sp,
-                            color = Color.White,
-                            letterSpacing = 0.5.sp,
-                        )
-
-                        IconButtonLocal(
-                            onClick = { },
-                            icon = R.drawable.ic_arrow_forward,
-                            iconSize = 24.dp,
-                            boxSize = 36.dp
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    PlayableVoiceCard(onClick = {})
-                }
+//                Column(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(horizontal = 16.dp),
+//                    verticalArrangement = Arrangement.Center,
+//                    horizontalAlignment = Alignment.CenterHorizontally
+//                ) {
+//                    Row(
+//                        modifier = Modifier.fillMaxWidth(),
+//                        horizontalArrangement = Arrangement.SpaceBetween,
+//                        verticalAlignment = Alignment.CenterVertically
+//                    ) {
+//                        Text(
+//                            text = "Voices",
+//                            fontSize = 26.sp,
+//                            color = Color.White,
+//                            letterSpacing = 0.5.sp,
+//                        )
+//
+//                        IconButtonLocal(
+//                            onClick = { },
+//                            icon = R.drawable.ic_arrow_forward,
+//                            iconSize = 24.dp,
+//                            boxSize = 36.dp
+//                        )
+//                    }
+//                    Spacer(modifier = Modifier.height(16.dp))
+//
+//                    PlayableVoiceCard(onClick = {})
+//                }
 
                 Spacer(modifier = Modifier.height(20.dp))
 
@@ -217,7 +223,7 @@ fun MemoryScreen() {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    BackStoryCard(onClick = {})
+                    EmptyBackStoryCard(onClick = {})
 
                 }
 
@@ -234,17 +240,18 @@ fun MemoryScreen() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 IconButtonLocal(
-                    onClick = { },
+                    onClick = {navigator.pop() },
                     icon = R.drawable.ic_arrow_back,
                     iconSize = 24.dp,
                     boxSize = 36.dp
                 )
-                IconButtonLocal(
-                    onClick = { },
-                    icon = R.drawable.ic_close,
-                    iconSize = 24.dp,
-                    boxSize = 36.dp
-                )
+
+//                IconButtonLocal(
+//                    onClick = { },
+//                    icon = R.drawable.ic_close,
+//                    iconSize = 24.dp,
+//                    boxSize = 36.dp
+//                )
             }
         }
     }
@@ -341,6 +348,7 @@ fun NoMemoriesCardAddButton(
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(50))
+            .clickable{onClick()}
             .border(
                 width = 1.dp,
                 color = Color.White.copy(0.2f),
@@ -426,7 +434,7 @@ fun PlayableVoiceCard(
 
 
 @Composable
-fun BackStoryCard(
+fun EmptyBackStoryCard(
     onClick: () -> Unit
 ) {
     Box(
@@ -471,9 +479,43 @@ fun BackStoryCard(
     }
 }
 
+@Composable
+fun FilledBackStoryCard(text: String, onClick: () -> Unit){
+    Box(
+        modifier = Modifier
+            .clip(RoundedCornerShape(20.dp))
+            .fillMaxWidth()
+            .clickable { onClick() }
+            .border(
+                1.dp,
+                Color.White.copy(alpha = 0.2f),
+                RoundedCornerShape(20.dp)
+            ),
+        contentAlignment = Alignment.CenterStart
+    ) {
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .blur(20.dp)
+                .background(Color.White.copy(alpha = 0.08f))
+        )
+
+        Text(
+            text = text,
+            color = Color.White,
+            fontSize = 15.sp,
+            maxLines = 5,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 16.dp)
+        )
+
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable
 fun MemoryScreenPreview() {
-    MemoryScreen()
+//    MemoryScreen()
+//    FilledBackStoryCard(onClick = {}, text = "wertyuiokjhgfrtyuiokjfdrtyuijhgfrtyuijbvfrtyujhvfdrtyujkjnbvftyuikn hguhihii")
 }

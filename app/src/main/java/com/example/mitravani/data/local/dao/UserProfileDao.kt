@@ -24,4 +24,7 @@ interface UserProfileDao {
 
     @Query("UPDATE user_profile SET personality = :personality WHERE id = 1")
     suspend fun updatePersonality(personality: String)
+
+    @Query("UPDATE user_profile SET backstory = :backstory WHERE id = 1")
+    suspend fun updateBackstory(backstory: String)
 }

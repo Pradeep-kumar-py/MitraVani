@@ -48,7 +48,7 @@ fun VoiceScreen() {
                     icon = R.drawable.ic_arrow_back,
                 )
 
-                TopBarName("Voice")
+                TopBarName("Voice", onClick = {})
 
                 IconButtonLocal(
                     onClick = { /* Handle menu click */ },

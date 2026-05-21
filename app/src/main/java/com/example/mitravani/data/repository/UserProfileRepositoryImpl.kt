@@ -25,4 +25,8 @@ class UserProfileRepositoryImpl(
     // Onboarding is complete if userName is not blank
     override suspend fun isOnboardingComplete(): Boolean =
         userProfileDao.getProfile()?.userName?.isNotBlank() == true
+
+    override suspend fun updateBackstory(backstory: String) {
+        userProfileDao.updateBackstory(backstory)
+    }
 }

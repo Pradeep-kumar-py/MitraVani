@@ -2,6 +2,7 @@ package com.example.mitravani.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,10 +17,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TopBarName(name: String) {
+fun TopBarName(name: String, onClick: () -> Unit ) {
     Box(
         modifier = Modifier
             .clip(RoundedCornerShape(50))
+            .clickable{onClick()}
             .border(
                 1.dp,
                 Color.White.copy(alpha = 0.2f),

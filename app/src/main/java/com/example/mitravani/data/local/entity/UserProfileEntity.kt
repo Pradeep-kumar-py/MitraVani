@@ -11,5 +11,6 @@ data class UserProfileEntity(
     val companionName: String = "Mitravani",
     val personality: String = "Friendly",  // Friendly/Romantic/Playful/Supportive
     val gender: String = "Female",
+    val backstory: String = "",
     val createdAt: Long = System.currentTimeMillis()
 )

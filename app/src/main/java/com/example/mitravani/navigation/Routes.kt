@@ -15,6 +15,22 @@ sealed interface Screen: NavKey {
     @Serializable
     data object OnboardingScreenThree : Screen
 
+
+    @Serializable
+    data object Home : Screen
+
+    @Serializable
+    data object Memory : Screen
+
+    @Serializable
+    data object MemoryDetailScreen : Screen
+
+    @Serializable
+    data object MemoryCategoryEditScreen : Screen
+
+    @Serializable
+    data object BackStoryScreen : Screen
+
     // Auth screens
     @Serializable
     data object Login : Screen
@@ -22,8 +38,6 @@ sealed interface Screen: NavKey {
     @Serializable
     data object Signup : Screen
 
-    @Serializable
-    data object Home : Screen
 
 
     @Serializable

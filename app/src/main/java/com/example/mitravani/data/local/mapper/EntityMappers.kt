@@ -28,7 +28,8 @@ fun UserProfileEntity.toDomain() = UserProfile(
     userName = userName,
     companionName = companionName,
     personality = personality,
-    gender = gender
+    gender = gender,
+    backstory = backstory
 )
 
 fun UserProfile.toEntity() = UserProfileEntity(
@@ -36,7 +37,8 @@ fun UserProfile.toEntity() = UserProfileEntity(
     userName = userName,
     companionName = companionName,
     personality = personality,
-    gender = gender
+    gender = gender,
+    backstory = backstory
 )
 
 fun MemoryEntity.toDomain() = Memory(

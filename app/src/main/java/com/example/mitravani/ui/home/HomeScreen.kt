@@ -23,6 +23,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.mitravani.R
 import com.example.mitravani.domain.model.Sender
+import com.example.mitravani.navigation.LocalNavigator
+import com.example.mitravani.navigation.Screen
 import com.example.mitravani.ui.components.IconButtonLocal
 import com.example.mitravani.ui.components.TopBarName
 import org.koin.androidx.compose.koinViewModel
@@ -30,7 +32,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen() {
-
+    val navigator = LocalNavigator.current
     val viewModel: HomeViewModel = koinViewModel()
     val uiState by viewModel.uiState.collectAsState()
     val listState = rememberLazyListState()
@@ -70,7 +72,7 @@ fun HomeScreen() {
                     iconSize = 24.dp,
                     boxSize = 36.dp
                 )
-                TopBarName(name = "MitraVani")
+                TopBarName(name = "MitraVani", onClick = {navigator.navigate(screen = Screen.Memory)})
                 IconButtonLocal(
                     onClick = { },
                     icon = R.drawable.ic_profile,

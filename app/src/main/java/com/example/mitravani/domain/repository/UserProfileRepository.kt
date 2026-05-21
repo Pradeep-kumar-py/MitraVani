@@ -8,4 +8,6 @@ interface UserProfileRepository {
     suspend fun getProfile(): UserProfile?
     fun observeProfile(): Flow<UserProfile?>
     suspend fun isOnboardingComplete(): Boolean
+
+    suspend fun updateBackstory(backstory: String)
 }
